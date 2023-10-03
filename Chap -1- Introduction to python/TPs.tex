@@ -1,0 +1,2725 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{TPs}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    \tableofcontents
+
+    
+    \hypertarget{tp-1-variables-fonctions-et-structure-de-control}{%
+\section{TP 1: Variables, Fonctions et Structure de
+control}\label{tp-1-variables-fonctions-et-structure-de-control}}
+
+\hypertarget{variables-et-operations}{%
+\subsection{Variables et Operations}\label{variables-et-operations}}
+
+    En programmation, une variable est un espace de stockage nommé qui
+permet de stocker des données. En Python, un langage de programmation
+polyvalent et largement utilisé, il existe quatre grands types de
+variables qui nous permettent de stocker différents types de données.
+Comprendre ces types de variables est essentiel pour manipuler
+efficacement les données dans un programme Python. Les Quatre Types
+Principaux de Variables en Python
+
+\begin{verbatim}
+int (nombre entier) : Les variables de type "int" sont utilisées pour stocker des nombres entiers. Par exemple, age = 25 stocke un nombre entier, dans ce cas l'âge de quelqu'un.
+
+float (nombre décimal) : Les variables de type "float" sont utilisées pour stocker des nombres décimaux. Par exemple, prix = 19.99 stocke un nombre décimal, ici un prix en euros.
+
+string (chaîne de caractères) : Les variables de type "string" sont utilisées pour stocker des séquences de caractères. Par exemple, nom = "Alice" stocke une chaîne de caractères, ici le nom d'une personne.
+
+bool (booléen) : Les variables de type "bool" sont utilisées pour stocker des valeurs booléennes, c'est-à-dire True (Vrai) ou False (Faux). Par exemple, est_majeur = True stocke une valeur booléenne, indiquant si quelqu'un est majeur ou non.
+\end{verbatim}
+
+En Python, la déclaration d'une variable est simple. Vous pouvez
+attribuer une valeur à une variable en utilisant le signe égal (=). Par
+exemple, pour attribuer la valeur 42 à une variable nombre, vous feriez
+nombre = 42.
+
+Il est important de noter que les noms de variables en Python doivent
+suivre certaines conventions, telles que ne pas commencer par un chiffre
+et ne contenir que des lettres, des chiffres et des underscores.
+
+L'utilisation des variables est fondamentale en programmation, car elles
+nous permettent de stocker et de manipuler des données de manière
+dynamique. Dans ce cours, nous explorerons en détail chaque type de
+variable et comment les utiliser efficacement pour résoudre des
+problèmes de programmation.
+
+Maintenant que nous avons une compréhension de base des variables en
+Python, explorons chacun de ces types en détail dans les sections
+suivantes.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{x} \PY{o}{=} \PY{l+m+mi}{3} \PY{c+c1}{\PYZsh{} type int }
+\PY{n}{y} \PY{o}{=} \PY{l+m+mf}{2.5} \PY{c+c1}{\PYZsh{} type float}
+\PY{n}{prenom} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pierre}\PY{l+s+s1}{\PYZsq{}} \PY{c+c1}{\PYZsh{} type string}
+\PY{n}{z} \PY{o}{=} \PY{k+kc}{True} \PY{c+c1}{\PYZsh{} type Bool}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{type}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{,}\PY{n+nb}{type}\PY{p}{(}\PY{n}{y}\PY{p}{)}\PY{p}{,} \PY{n+nb}{type}\PY{p}{(}\PY{n}{prenom}\PY{p}{)}\PY{p}{,}\PY{n+nb}{type}\PY{p}{(}\PY{n}{z}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'int'> <class 'float'> <class 'str'> <class 'bool'>
+    \end{Verbatim}
+
+    \hypertarget{opuxe9rations-arithmuxe9tiques-en-python}{%
+\subsubsection{Opérations Arithmétiques en
+Python}\label{opuxe9rations-arithmuxe9tiques-en-python}}
+
+Les opérations arithmétiques sont un aspect fondamental de la
+programmation en Python. Elles permettent de réaliser des calculs
+mathématiques de base, ce qui est essentiel dans le développement de
+tout type d'application. Dans cette section, nous explorerons les
+opérations arithmétiques de base en Python, notamment l'addition, la
+soustraction, la multiplication, la division et la puissance.
+
+Python offre une syntaxe simple et intuitive pour effectuer ces
+opérations, ce qui en fait un langage de programmation populaire pour
+les calculs mathématiques et scientifiques, ainsi que pour des
+applications plus générales.
+
+Nous aborderons les sujets suivants dans cette section : - Addition (+)
+- Soustraction (-) - Multiplication (*) - Division (/) - Opérations avec
+des nombres entiers - Utilisation de parenthèses pour contrôler l'ordre
+des opérations - Utilisation de la fonction \texttt{pow()} pour calculer
+les puissances
+
+Comprendre comment utiliser ces opérations est essentiel pour manipuler
+des données numériques et résoudre des problèmes mathématiques à l'aide
+de Python.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Opérations arithmétiques}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x + y =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x} \PY{o}{+} \PY{n}{y}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x \PYZhy{} y =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x} \PY{o}{\PYZhy{}} \PY{n}{y}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x / y =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x} \PY{o}{/} \PY{n}{y}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x // y =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x} \PY{o}{/}\PY{o}{/} \PY{n}{y}\PY{p}{)} \PY{c+c1}{\PYZsh{} division entiere (tres utile pour les tableaux Numpy)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x * y =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x} \PY{o}{*} \PY{n}{y}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x \PYZca{} y =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x} \PY{o}{*}\PY{o}{*} \PY{n}{y}\PY{p}{)} \PY{c+c1}{\PYZsh{} x puissance y}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+x + y = 5.5
+x - y = 0.5
+x / y = 1.2
+x // y = 1.0
+x * y = 7.5
+x \^{} y = 15.588457268119896
+    \end{Verbatim}
+
+    \hypertarget{opuxe9rations-de-comparaison-en-python}{%
+\subsubsection{Opérations de Comparaison en
+Python}\label{opuxe9rations-de-comparaison-en-python}}
+
+Les opérations de comparaison sont essentielles en programmation pour
+évaluer des conditions et prendre des décisions en fonction de ces
+évaluations. En Python, vous pouvez comparer des valeurs et des
+expressions pour déterminer si elles sont égales, plus grandes, plus
+petites ou d'autres relations. Dans cette section, nous explorerons les
+opérations de comparaison en Python.
+
+Voici les principales opérations de comparaison que nous allons aborder
+: - Égalité (==) : Vérifie si deux valeurs sont égales. - Inégalité (!=)
+: Vérifie si deux valeurs ne sont pas égales. - Supériorité
+(\textgreater) : Vérifie si une valeur est strictement supérieure à une
+autre. - Infériorité (\textless) : Vérifie si une valeur est strictement
+inférieure à une autre. - Supériorité ou égalité (\textgreater=) :
+Vérifie si une valeur est supérieure ou égale à une autre. - Infériorité
+ou égalité (\textless=) : Vérifie si une valeur est inférieure ou égale
+à une autre.
+
+Ces opérations de comparaison sont couramment utilisées pour créer des
+expressions conditionnelles, des boucles et d'autres structures de
+contrôle de flux dans vos programmes Python.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Opérations de comparaison}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{égalité :}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x} \PY{o}{==} \PY{n}{y}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{inégalité :}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x} \PY{o}{!=} \PY{n}{y}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{inférieur ou égal :}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{y}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{supérieur ou égal :}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{n}{y}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+égalité : False
+inégalité : True
+inférieur ou égal : False
+supérieur ou égal : True
+    \end{Verbatim}
+
+    \hypertarget{opuxe9rations-logiques-en-python}{%
+\subsubsection{Opérations Logiques en
+Python}\label{opuxe9rations-logiques-en-python}}
+
+Les opérations logiques sont un élément clé de la programmation en
+Python, utilisées pour évaluer des conditions complexes et prendre des
+décisions basées sur ces conditions. Les opérations logiques permettent
+de combiner et de manipuler des valeurs booléennes (Vrai ou Faux) de
+manière à construire des expressions conditionnelles puissantes. Dans
+cette section, nous explorerons les opérations logiques en Python.
+
+Les opérations logiques principales que nous allons aborder sont les
+suivantes : - ET logique (\texttt{and}) : Vérifie si deux conditions
+sont simultanément vraies. - OU logique (\texttt{or}) : Vérifie si au
+moins l'une des deux conditions est vraie. - NON logique (\texttt{not})
+: Inverse une condition booléenne.
+
+Ces opérations logiques sont utilisées pour créer des expressions
+conditionnelles complexes qui permettent de contrôler le flux de votre
+programme. Elles sont essentielles pour prendre des décisions, exécuter
+certaines parties du code en fonction de conditions, et créer des
+boucles conditionnelles.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Opérations Logiques}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ET :}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{k+kc}{False} \PY{o+ow}{and} \PY{k+kc}{True}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OU :}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{k+kc}{False} \PY{o+ow}{or} \PY{k+kc}{True}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OU exclusif :}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{k+kc}{False} \PY{o}{\PYZca{}} \PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+ET : False
+OU : True
+OU exclusif : True
+    \end{Verbatim}
+
+    Note : Les opérations de comparaison et de logique utilisées ensemble
+permettent de construire des structures algorithmiques de bases
+(if/esle, while, \ldots)
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Table Logiques de AND}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{  A     B   ||  A and B   }\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{False True  ||  }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{k+kc}{False} \PY{o+ow}{and} \PY{k+kc}{True}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{False False ||  }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{k+kc}{False} \PY{o+ow}{and} \PY{k+kc}{False}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{True  True  ||  }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{k+kc}{True} \PY{o+ow}{and} \PY{k+kc}{True}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{True  False ||  }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{k+kc}{False} \PY{o+ow}{and} \PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+  A     B   ||  A and B
+-------------------------
+False True  ||   False
+False False ||   False
+True  True  ||   True
+True  False ||   False
+    \end{Verbatim}
+
+    \hypertarget{fonctions}{%
+\subsection{Fonctions}\label{fonctions}}
+
+Les fonctions sont des éléments fondamentaux de la programmation en
+Python. Elles permettent d'organiser et de structurer le code en le
+divisant en blocs de code réutilisables. Une fonction est un ensemble
+d'instructions qui effectuent une tâche spécifique et peuvent prendre
+des arguments en entrée pour personnaliser leur comportement. Les
+fonctions sont essentielles pour rendre le code plus lisible, modulaire
+et facile à entretenir.
+
+Dans Python, une fonction est définie à l'aide du mot-clé def, suivi du
+nom de la fonction et de ses paramètres entre parenthèses. Elle peut
+avoir un corps de fonction qui contient les instructions à exécuter
+lorsque la fonction est appelée. Les fonctions peuvent également
+retourner des valeurs à l'aide du mot-clé return.
+
+L'utilisation de fonctions permet de réduire la redondance du code en
+regroupant des actions similaires sous une seule fonction. Elles offrent
+également la possibilité de diviser un programme en morceaux plus petits
+et plus gérables, ce qui simplifie le débogage et la maintenance du
+code.
+
+\hypertarget{les-fonctions-lambda-en-python}{%
+\subsubsection{Les Fonctions Lambda en
+Python}\label{les-fonctions-lambda-en-python}}
+
+Les fonctions lambda, également connues sous le nom de fonctions
+anonymes, sont un concept intéressant en Python. Contrairement aux
+fonctions définies avec def, les fonctions lambda sont des fonctions
+courtes et temporaires qui peuvent être créées sans avoir à nommer
+explicitement la fonction. Elles sont définies à l'aide du mot-clé
+lambda, suivi des paramètres entre parenthèses et d'une expression
+unique qui est évaluée et renvoyée comme résultat.
+
+Présentation des Fonctions Lambda :
+
+Les fonctions lambda sont souvent utilisées pour des opérations simples
+et ponctuelles, telles que les transformations de données dans une
+liste, les filtres ou les opérations mathématiques simples. Elles sont
+particulièrement utiles lorsque vous avez besoin d'une petite fonction
+pour effectuer une tâche spécifique, sans la complexité d'une fonction
+définie avec def.
+
+Définition des Fonctions Lambda :
+
+Une fonction lambda est définie comme suit :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{lambda}\NormalTok{ arguments: expression}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+arguments : Les paramètres que la fonction lambda prend en entrée, séparés par des virgules.
+expression : L'expression unique qui est évaluée et renvoyée comme résultat lorsque la fonction lambda est appelée.
+\end{verbatim}
+
+Voici un exemple simple d'une fonction lambda qui additionne deux
+nombres :
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Exemple d\PYZsq{}une fonction f(x) = x\PYZca{}2}
+\PY{n}{f} \PY{o}{=} \PY{k}{lambda} \PY{n}{x} \PY{p}{:} \PY{n}{x}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+9
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Exemple d\PYZsq{}une fonction g(x, y) = x\PYZca{}2 \PYZhy{} y\PYZca{}2}
+\PY{n}{g} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{,} \PY{n}{y} \PY{p}{:} \PY{n}{x}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{n}{y}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{g}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+12
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{g}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+12
+    \end{Verbatim}
+
+    \hypertarget{fonction-en-python}{%
+\subsubsection{Fonction en Python}\label{fonction-en-python}}
+
+Une fonction en Python est une portion de code qui effectue une tâche
+spécifique ou une série de tâches. Les fonctions sont utilisées pour
+organiser et réutiliser du code en le divisant en blocs autonomes. Une
+fonction peut être conçue pour prendre des arguments en entrée,
+effectuer des opérations sur ces arguments, et renvoyer un résultat en
+sortie. Les fonctions sont définies à l'aide du mot-clé def, suivi du
+nom de la fonction et de ses paramètres entre parenthèses, le cas
+échéant.
+
+Définition d'une Fonction :
+
+Voici la structure de base de la définition d'une fonction en Python :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\KeywordTok{def}\NormalTok{ nom\_de\_la\_fonction(parametre1, parametre2, ...):}
+    \CommentTok{\# Instructions de la fonction}
+    \CommentTok{\# Ces instructions décrivent ce que la fonction fait}
+    \CommentTok{\# Elles peuvent inclure des calculs, des opérations, des boucles, etc.}
+    \ControlFlowTok{return}\NormalTok{ resultat}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+nom_de_la_fonction : Le nom que vous choisissez pour votre fonction.
+parametre1, parametre2, ... : Les paramètres (également appelés arguments) que la fonction peut accepter en entrée. Vous pouvez en spécifier un ou plusieurs, ou même aucun.
+return resultat : Facultatif. Si vous souhaitez que votre fonction renvoie un résultat, utilisez l'instruction return pour le spécifier. Le résultat peut être une valeur, un objet, une liste, etc.
+\end{verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} une fonction a un nom, prend des entrées (arguments) et les transforme pour retourner un résultat}
+
+\PY{k}{def} \PY{n+nf}{nom\PYZus{}de\PYZus{}la\PYZus{}fonction}\PY{p}{(}\PY{n}{argument\PYZus{}1}\PY{p}{,} \PY{n}{argument\PYZus{}2}\PY{p}{)}\PY{p}{:}
+   \PY{n}{restultat} \PY{o}{=} \PY{n}{argument\PYZus{}1} \PY{o}{+} \PY{n}{argument\PYZus{}2}
+   \PY{k}{return} \PY{n}{restultat}
+
+\PY{n}{nom\PYZus{}de\PYZus{}la\PYZus{}fonction}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+5
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Exemple concret : fonction qui calcul l\PYZsq{}energie potentielle d\PYZsq{}un corps}
+
+\PY{k}{def} \PY{n+nf}{e\PYZus{}potentielle}\PY{p}{(}\PY{n}{masse}\PY{p}{,} \PY{n}{hauteur}\PY{p}{,} \PY{n}{g}\PY{o}{=}\PY{l+m+mf}{9.81}\PY{p}{)}\PY{p}{:}
+  \PY{n}{energie} \PY{o}{=} \PY{n}{masse} \PY{o}{*} \PY{n}{hauteur} \PY{o}{*} \PY{n}{g} 
+  \PY{k}{return} \PY{n}{energie}
+
+\PY{c+c1}{\PYZsh{} ici g a une valeur par défaut donc nous ne sommes pas obligé de lui donner une valeur}
+\PY{n}{e\PYZus{}potentielle}\PY{p}{(}\PY{n}{masse}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{hauteur}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+981.0
+\end{Verbatim}
+\end{tcolorbox}
+        
+    a notion de docstring, ou chaîne de documentation, est un concept
+important en programmation Python. Il s'agit d'une convention utilisée
+pour documenter des fonctions, des classes, des modules ou des méthodes
+en fournissant une description claire et concise de ce qu'ils font, de
+leurs paramètres, de leurs valeurs de retour, et de toute autre
+information pertinente. Les docstrings sont des commentaires spéciaux
+dans le code Python qui sont accessibles via l'attribut \textbf{doc}
+d'un objet.
+
+Voici quelques points clés pour comprendre les docstrings en Python :
+
+\begin{verbatim}
+Format des Docstrings : Les docstrings sont généralement encadrées par trois guillemets simples (''') ou triples guillemets doubles ("""). Voici un exemple de docstring pour une fonction 
+\end{verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{ma\PYZus{}fonction}\PY{p}{(}\PY{n}{parametre}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Description de la fonction.}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Args:}
+\PY{l+s+sd}{        parametre (type): Description du paramètre.}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{        type\PYZus{}de\PYZus{}retour: Description de la valeur de retour.}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{c+c1}{\PYZsh{} Le code de la fonction}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Contenu des Docstrings : Les docstrings doivent contenir des
+informations claires et utiles sur l'objet qu'ils documentent. Cela peut
+inclure :
+
+\begin{verbatim}
+Une brève description de ce que fait la fonction.
+Une liste des paramètres, avec leur type et une description.
+Une description de la valeur de retour de la fonction.
+Des exemples d'utilisation.
+\end{verbatim}
+
+Accès aux Docstrings : Vous pouvez accéder au contenu d'un docstring à
+l'aide de l'attribut \textbf{doc} de l'objet. Par exemple :
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ma\PYZus{}fonction}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}doc\PYZus{}\PYZus{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    Description de la fonction.
+
+    Args:
+        parametre (type): Description du paramètre.
+
+    Returns:
+        type\_de\_retour: Description de la valeur de retour.
+
+    \end{Verbatim}
+
+    Cela affichera la documentation de la fonction ma\_fonction à la
+console.
+
+Utilité des Docstrings : Les docstrings sont utiles pour plusieurs
+raisons :
+
+\begin{verbatim}
+Ils aident les autres développeurs (ou vous-même) à comprendre rapidement comment utiliser une fonction, une classe ou un module.
+Ils servent de référence lors de la documentation du code.
+Ils sont utilisés par des outils de documentation automatique tels que Sphinx pour générer des documents de référence et des pages de documentation.
+\end{verbatim}
+
+    \hypertarget{structures-de-contruxf4le-en-programmation}{%
+\subsection{Structures de Contrôle en
+Programmation}\label{structures-de-contruxf4le-en-programmation}}
+
+Les structures de contrôle jouent un rôle central dans la programmation
+en Python (et dans de nombreux autres langages). Elles sont essentielles
+pour définir le flux d'exécution d'un programme, permettant ainsi de
+prendre des décisions, de répéter des tâches et d'organiser le code de
+manière logique. Dans cette section, nous explorerons trois principales
+structures de contrôle qui sont fondamentales pour la création
+d'algorithmes efficaces :
+
+\begin{itemize}
+\item
+  \textbf{Les Blocks d'Instructions :} Ces structures délimitent des
+  sections de code qui s'exécutent ensemble, souvent à l'intérieur d'une
+  fonction ou d'une boucle. Les blocs d'instructions contribuent à
+  organiser et à structurer votre code de manière compréhensible.
+\item
+  \textbf{Les Instructions Conditionnelles (If / Else) :} Les
+  instructions conditionnelles permettent de prendre des décisions dans
+  un programme. Selon une condition donnée, le programme peut exécuter
+  différentes parties de code. Le constructeur ``If'' permet d'exécuter
+  une action si une condition est vraie, tandis que ``Else'' permet de
+  définir une action alternative si la condition n'est pas remplie.
+\item
+  \textbf{Les Instructions Itératives (For, While) :} Les instructions
+  itératives sont utilisées pour répéter des actions plusieurs fois. La
+  boucle ``For'' permet de parcourir un ensemble de données ou de
+  répéter un bloc de code un nombre spécifique de fois. La boucle
+  ``While'' répète un bloc de code tant qu'une condition reste vraie.
+\end{itemize}
+
+    \hypertarget{les-blocks-dinstructions}{%
+\subsubsection{Les Blocks
+d'instructions}\label{les-blocks-dinstructions}}
+
+En programmation, un bloc d'instructions, aussi appelé ``suite
+d'instructions'' ou ``bloc de code'', est une séquence d'instructions
+qui sont regroupées ensemble et exécutées comme une seule unité. Les
+blocs d'instructions sont utilisés pour organiser et structurer le code
+de manière logique et cohérente. Ils jouent un rôle essentiel pour
+rendre un programme lisible et maintenable. Voici quelques points clés
+pour comprendre les blocs d'instructions :
+
+\begin{verbatim}
+Définition des Blocs d'Instructions : Un bloc d'instructions est généralement délimité par des symboles spéciaux, tels que des accolades {} en langages comme Python, C, C++, Java, etc., ou par des mots-clés tels que begin et end en langage Pascal. Par exemple, en Python, un bloc d'instructions peut ressembler à ceci :
+\end{verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{ma\PYZus{}fonction}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Ceci est le début du bloc d\PYZsq{}instructions}
+    \PY{n}{instruction\PYZus{}1}
+    \PY{n}{instruction\PYZus{}2}
+    \PY{c+c1}{\PYZsh{} ...}
+    \PY{n}{instruction\PYZus{}n}
+    \PY{c+c1}{\PYZsh{} Ceci est la fin du bloc d\PYZsq{}instructions}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Les blocs d'instructions servent principalement à :
+
+\begin{itemize}
+\tightlist
+\item
+  Regrouper des instructions associées : Les instructions à l'intérieur
+  d'un bloc ont souvent un objectif commun ou sont liées à une tâche
+  spécifique.
+\item
+  Définir la portée : Les variables déclarées à l'intérieur d'un bloc
+  sont généralement visibles uniquement à l'intérieur de ce bloc, ce qui
+  permet de limiter leur portée (scope).
+\item
+  Faciliter la lisibilité : En regroupant des instructions similaires
+  dans un bloc, le code devient plus lisible et plus facile à
+  comprendre.
+\end{itemize}
+
+Usage Courant : Les blocs d'instructions sont couramment utilisés dans
+les fonctions et les méthodes, où ils regroupent le code spécifique à la
+fonction. Les boucles et les structures conditionnelles utilisent
+également des blocs pour déterminer quelles parties du code doivent être
+répétées ou exécutées sous certaines conditions.
+
+Emboîtement de Blocs : Il est important de noter que les blocs
+d'instructions peuvent être emboîtés, c'est-à-dire qu'un bloc peut
+contenir d'autres blocs. Cela permet de hiérarchiser et de structurer le
+code de manière complexe. Par exemple, une fonction peut contenir une
+boucle, et cette boucle peut elle-même contenir un bloc conditionnel, et
+ainsi de suite.
+
+Indentation : En Python, contrairement à certains autres langages,
+l'indentation est cruciale pour définir les blocs d'instructions. Les
+lignes de code appartenant au même bloc doivent être indentées de la
+même manière, ce qui garantit la lisibilité du code
+
+    \hypertarget{les-instructions-conditionnelles}{%
+\subsubsection{Les instructions conditionnelles
+:}\label{les-instructions-conditionnelles}}
+
+Les instructions conditionnelles, également appelées structures de
+contrôle conditionnelles, sont un élément essentiel de la programmation.
+Elles permettent à un programme de prendre des décisions basées sur des
+conditions spécifiques. En Python, les instructions conditionnelles les
+plus couramment utilisées sont \texttt{if}, \texttt{elif} (else if), et
+\texttt{else}. Voici une explication détaillée des instructions
+conditionnelles :
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Instruction \texttt{if} :} L'instruction \texttt{if} permet
+  d'exécuter un bloc de code uniquement si une condition spécifiée est
+  évaluée comme vraie (True). La syntaxe de base est la suivante :
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+   \ControlFlowTok{if}\NormalTok{ condition:}
+       \CommentTok{\# Bloc de code à exécuter si la condition est vraie}
+\end{Highlighting}
+\end{Shaded}
+
+Par exemple, vous pouvez utiliser une instruction if pour vérifier si un
+nombre est positif.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Instruction elif (Else If) : L'instruction elif est utilisée pour
+  spécifier une condition alternative à vérifier si la première
+  condition (if) n'est pas remplie. Elle permet de gérer plusieurs
+  conditions différentes. Voici comment elle est utilisée :
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\ControlFlowTok{if}\NormalTok{ condition1:}
+    \CommentTok{\# Bloc de code à exécuter si condition1 est vraie}
+\ControlFlowTok{elif}\NormalTok{ condition2:}
+    \CommentTok{\# Bloc de code à exécuter si condition2 est vraie}
+\end{Highlighting}
+\end{Shaded}
+
+Par exemple, vous pouvez utiliser elif pour vérifier si un nombre est
+nul, positif ou négatif.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Instruction else : L'instruction else est utilisée pour spécifier un
+  bloc de code à exécuter si aucune des conditions précédentes n'est
+  vraie. Elle est souvent utilisée comme option de secours lorsque
+  toutes les autres conditions échouent. Voici comment elle est utilisée
+  :
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\ControlFlowTok{if}\NormalTok{ condition:}
+    \CommentTok{\# Bloc de code à exécuter si la condition est vraie}
+\ControlFlowTok{else}\NormalTok{:}
+    \CommentTok{\# Bloc de code à exécuter si la condition n\textquotesingle{}est pas vraie}
+\end{Highlighting}
+\end{Shaded}
+
+Par exemple, dans l'exemple précédent, le bloc de code associé à else
+sera exécuté lorsque nombre est égal à 0.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{test\PYZus{}du\PYZus{}signe}\PY{p}{(}\PY{n}{valeur}\PY{p}{)}\PY{p}{:}
+  \PY{k}{if} \PY{n}{valeur} \PY{o}{\PYZlt{}} \PY{l+m+mi}{0}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{négatif}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+  \PY{k}{elif} \PY{n}{valeur} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nul}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+  \PY{k}{else}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{positif}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{p}{(}\PY{n}{test\PYZus{}du\PYZus{}signe}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+\PY{p}{(}\PY{n}{test\PYZus{}du\PYZus{}signe}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+\PY{p}{(}\PY{n}{test\PYZus{}du\PYZus{}signe}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+négatif
+positif
+nul
+    \end{Verbatim}
+
+    Note importante : Une condition est respectée si et seulement si elle
+correspond au résultat \textbf{booléen True}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{valeur} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{2}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{valeur} \PY{o}{\PYZlt{}} \PY{l+m+mi}{0}\PY{p}{)} \PY{c+c1}{\PYZsh{} le résultat de cette comparaison est True}
+
+\PY{k}{if} \PY{n}{valeur} \PY{o}{\PYZlt{}} \PY{l+m+mi}{0}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{négatif}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+True
+négatif
+    \end{Verbatim}
+
+    Cela permet de développer des algorithmes avec des mélanges d'opéations
+Logiques et d'opérations de comparaisons. Par exemple : \emph{si il fait
+beau et qu'il faut chaud, alors j'irai me baigner}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{x} \PY{o}{=} \PY{l+m+mi}{3}
+\PY{n}{y} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+\PY{k}{if} \PY{p}{(}\PY{n}{x}\PY{o}{\PYZgt{}}\PY{l+m+mi}{0}\PY{p}{)} \PY{o+ow}{and} \PY{p}{(}\PY{n}{y}\PY{o}{\PYZgt{}}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x et y sont positifs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{k}{else}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x et y ne sont pas tous les 2 positifs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+x et y ne sont pas tous les 2 positifs
+    \end{Verbatim}
+
+    \hypertarget{les-instructions-ituxe9ratives-for-while}{%
+\subsubsection{2. Les instructions itératives For,
+while}\label{les-instructions-ituxe9ratives-for-while}}
+
+Dans Python, les instructions itératives, notamment les boucles for et
+while, sont des structures de contrôle permettant de répéter des actions
+ou des séquences d'instructions un certain nombre de fois ou tant qu'une
+condition est remplie. Elles sont essentielles pour automatiser des
+tâches répétitives et pour parcourir des collections de données telles
+que des listes, des chaînes de caractères, ou des dictionnaires. Voici
+une présentation et une description détaillée de chacune de ces boucles
+: \#\#\#\# 1- Boucle for a boucle for est utilisée pour parcourir une
+séquence (comme une liste, une chaîne de caractères, un dictionnaire,
+etc.) et exécuter un bloc de code pour chaque élément de la séquence. La
+syntaxe de base de la boucle for est la suivante :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\ControlFlowTok{for}\NormalTok{ element }\KeywordTok{in}\NormalTok{ sequence:}
+    \CommentTok{\# Bloc de code à exécuter pour chaque élément}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  element : Une variable qui prend la valeur de chaque élément de la
+  séquence à chaque itération.
+\item
+  sequence : La séquence à parcourir, telle qu'une liste, une chaîne de
+  caractères, ou une plage générée par range(). Exemple d'utilisation de
+  la boucle for :
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} range(début, fin, pas) est une built\PYZhy{}in fonction tres utile de python qui retourne un itérable.}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} on peut s\PYZsq{}amuser a combiner cette boucle avec notre fonction de tout a l\PYZsq{}heure.}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+  \PY{n}{test\PYZus{}du\PYZus{}signe}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+-10
+négatif
+-8
+négatif
+-6
+négatif
+-4
+négatif
+-2
+négatif
+0
+nul
+2
+positif
+4
+positif
+6
+positif
+8
+positif
+    \end{Verbatim}
+
+    \hypertarget{boucle-while}{%
+\subsubsection{2. Boucle While}\label{boucle-while}}
+
+La boucle while permet d'exécuter un bloc de code tant qu'une condition
+spécifiée reste vraie. Elle est utile lorsque vous ne savez pas à
+l'avance combien d'itérations seront nécessaires. La syntaxe de base de
+la boucle while est la suivante :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\ControlFlowTok{while}\NormalTok{ condition:}
+    \CommentTok{\# Bloc de code à exécuter tant que la condition est vraie}
+\end{Highlighting}
+\end{Shaded}
+
+condition : Une expression booléenne qui est évaluée à chaque itération.
+La boucle continue tant que cette condition est vraie.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{x} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{k}{while} \PY{n}{x} \PY{o}{\PYZlt{}} \PY{l+m+mi}{10}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+  \PY{n}{x} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1} \PY{c+c1}{\PYZsh{} incrémente x de 1 (équivalent de x = x+1)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+    \end{Verbatim}
+
+    \hypertarget{exercices}{%
+\subsection{Exercices}\label{exercices}}
+
+\hypertarget{exercices-partie-1}{%
+\subsubsection{Exercices Partie 1}\label{exercices-partie-1}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Modifiez la fonction e\_potentielle définie plus haut pour retourner
+  une valeur indiquant si l'energie calculée est supérieure ou inférieur
+  a une \textbf{energie\_limite} passée en tant que \(4^{eme}\) argument
+\item
+  Créez une fonction Python qui prend deux nombres et un opérateur (+,
+  -, *, /) en entrée. Effectuez l'opération arithmétique correspondante
+  et renvoyez le résultat. Testez la fonction avec diverses valeurs
+  d'entrée et d'opérateurs.
+\item
+  Écrivez une fonction Python qui calcule l'aire d'un cercle en fonction
+  de son rayon. Utilisez la formule \texttt{aire\ =\ π\ *\ r\^{}2}, où π
+  (pi) est une constante. Permettez à l'utilisateur de saisir le rayon
+  et affichez l'aire.
+\item
+  Créez un programme Python capable de convertir entre les températures
+  Celsius et Fahrenheit. Écrivez des fonctions pour la conversion de
+  Celsius en Fahrenheit et vice versa. Demandez à l'utilisateur de
+  saisir la température et affichez la température convertie.
+\item
+  Écrivez une fonction Python qui vérifie si un entier donné est pair ou
+  impair. Utilisez des déclarations conditionnelles (if/else) pour
+  déterminer et renvoyer le résultat. Testez la fonction avec divers
+  nombres.
+\item
+  Développez une fonction Python qui vérifie si une chaîne donnée est un
+  palindrome (se lit de la même manière de gauche à droite et de droite
+  à gauche). Supprimez les espaces et convertissez la chaîne en
+  minuscules pour une vérification insensible à la casse. Renvoyez True
+  s'il s'agit d'un palindrome et False sinon. Testez la fonction avec
+  différents mots et phrases.
+\end{enumerate}
+
+\hypertarget{exercices-partie-2}{%
+\subsubsection{Exercices Partie 2}\label{exercices-partie-2}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Implémentez la \textbf{suite de Fibonacci} {[}0, 1, 1, 2, 3, 5, 8, 13,
+  21, \ldots{]} qui part de 2 nombres a=0 et b=1, et qui calcule le
+  nombre suivant en additionnant les 2 nombres précédents.
+\end{enumerate}
+
+Indices : - Pour cet exercice vous aurez besoin d'une bouce
+\textbf{While} - Vous pouvez imprimer cette suite jusqu'a atteindre un
+nombre \textbf{n} que vous aurez choisit - dans python il est possible
+de mettre a jour 2 variables simultannément sur la meme lignes :
+\textbf{a, b = b, a+b}
+
+    \begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Implémentez l'algorithme du jeu ``trouver le nombre'' qui est le
+  suivant : Un nombre aléatoire sera généré et le but est de le trouver.
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  À chaque itération, l'utilisateur essaie de deviner le nombre.
+\item
+  si l'utilisateur devine le numéro correctement, le jeu se terminera et
+  un message de félicitations apparaîtra
+\item
+  si l'utilisateur donne un nombre supérieur, un message ``inférieur''
+  apparaîtra
+\item
+  si l'utilisateur donne un nombre bas, un message ``supérieur''
+  apparaîtra
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}vous pouvez utiliser la function random }
+\PY{k+kn}{import} \PY{n+nn}{random}
+\PY{n}{x}\PY{o}{=} \PY{n}{random}\PY{o}{.}\PY{n}{randint}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+901
+    \end{Verbatim}
+
+    \begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\item
+  Write a Python program that prints all the multiples of 5 between 1
+  and 50 (inclusive).
+\item
+  Create a Python function that calculates the factorial of a given
+  positive integer. Ask the user for input and display the result.
+\item
+  Create a Python program that generates prime numbers within a
+  specified range. Ask the user to input the range and display the prime
+  numbers found.
+\end{enumerate}
+
+    \hypertarget{tp-2-structure-de-donnuxe9es}{%
+\section{TP 2: Structure de
+données}\label{tp-2-structure-de-donnuxe9es}}
+
+\hypertarget{listes-et-tuples}{%
+\subsection{Listes et Tuples}\label{listes-et-tuples}}
+
+En Python, les listes et les tuples sont deux structures de données
+fondamentales qui permettent de stocker et de gérer des collections
+d'éléments. Bien qu'ils partagent certaines similitudes, ils présentent
+des différences essentielles en termes de mutabilité, d'utilisation et
+de syntaxe. Voici une introduction aux listes et aux tuples en Python :
+
+\begin{itemize}
+\item
+  Listes en Python :
+
+  Une liste est une collection ordonnée et mutable d'éléments. Les
+  éléments d'une liste sont séparés par des virgules et sont entourés de
+  crochets {[}{]}. Les listes peuvent contenir des éléments de
+  différents types (nombres, chaînes de caractères, autres listes,
+  objets, etc.). Les listes peuvent être modifiées après leur création,
+  ce qui signifie que vous pouvez ajouter, supprimer ou modifier des
+  éléments. Pour accéder à un élément d'une liste, utilisez son index
+  (l'indice), en commençant par 0 pour le premier élément. Exemple :
+  ma\_liste = {[}1, 2, 3, `quatre', `cinq'{]}
+\item
+  Tuples en Python :
+
+  Un tuple est une collection ordonnée et immuable d'éléments. Les
+  éléments d'un tuple sont séparés par des virgules et sont entourés de
+  parenthèses (). Les tuples peuvent également contenir des éléments de
+  différents types. Contrairement aux listes, les tuples ne peuvent pas
+  être modifiés après leur création. Ils sont immuables. Pour accéder à
+  un élément d'un tuple, utilisez son index de la même manière qu'avec
+  les listes. Exemple : mon\_tuple = (1, 2, 3, `quatre', `cinq')
+\item
+  Utilisation Courante :
+
+  Les listes sont couramment utilisées pour stocker des collections
+  d'éléments lorsque vous avez besoin de modifier ces éléments au fil du
+  temps. Par exemple, une liste peut représenter une liste de tâches à
+  faire, des éléments dans un panier d'achat, etc. Les tuples sont
+  souvent utilisés lorsque vous voulez vous assurer que les données
+  restent constantes et ne doivent pas être modifiées accidentellement.
+  Par exemple, les coordonnées géographiques d'un lieu, les dimensions
+  d'un objet, etc.-
+\end{itemize}
+
+    \hypertarget{cruxe9ation-de-listes-et-de-tuples}{%
+\subsubsection{Création de Listes et de
+Tuples}\label{cruxe9ation-de-listes-et-de-tuples}}
+
+une liste ou un tuple peuvent contenir tout types de valeurs (int,
+float, bool, string). On dit que ce sont des structures hétérogenes.
+
+La différence entre les 2 est qu'une liste est \textbf{mutable} alors
+qu'un Tuple ne l'est pas (on ne peut pas le changer apres qu'il soit
+crée)
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Listes}
+\PY{n}{liste\PYZus{}1} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{,} \PY{l+m+mi}{35}\PY{p}{,} \PY{l+m+mi}{84}\PY{p}{]}
+\PY{n}{villes} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Paris}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Berlin}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Londres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bruxelles}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{nested\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{n}{liste\PYZus{}1}\PY{p}{,} \PY{n}{villes}\PY{p}{]} \PY{c+c1}{\PYZsh{} une liste peut meme contenir des listes ! On appelle cela une nested list}
+
+\PY{c+c1}{\PYZsh{}Tuples}
+\PY{n}{tuple\PYZus{}1} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{villes}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+['Paris', 'Berlin', 'Londres', 'Bruxelles']
+    \end{Verbatim}
+
+    \hypertarget{indexing-et-slicing}{%
+\subsubsection{Indexing et Slicing}\label{indexing-et-slicing}}
+
+Indexing :
+
+En Python, l'indexing fait référence à l'accès à un élément spécifique
+dans une séquence (comme une liste, une chaîne de caractères ou un
+tuple) en utilisant un numéro d'index. L'index est un entier qui
+identifie la position de l'élément dans la séquence. Voici quelques
+points importants concernant l'indexing :
+
+\begin{itemize}
+\tightlist
+\item
+  L'indexing commence généralement à 0 pour le premier élément de la
+  séquence. Par exemple, 0 est l'index du premier élément, 1 est l'index
+  du deuxième élément, et ainsi de suite.
+\item
+  Vous pouvez également utiliser des indices négatifs pour compter à
+  partir de la fin de la séquence. Par exemple, - 1 représente le
+  dernier élément, - 2 le deuxième élément en partant de la fin, et
+  ainsi de suite.
+\item
+  Pour accéder à un élément spécifique, utilisez la notation
+  {[}indice{]} après le nom de la séquence. Par exemple,
+  ma\_liste{[}0{]} accède au premier élément d'une liste.
+\item
+  Si l'indice spécifié est en dehors de la plage valide, une erreur
+  ``IndexError'' sera levée.
+\end{itemize}
+
+Slicing :
+
+Le slicing en Python consiste à extraire une partie d'une séquence en
+spécifiant une plage d'indices. Il vous permet de créer une nouvelle
+séquence à partir d'une partie de la séquence d'origine. Voici comment
+fonctionne le slicing :
+
+\begin{itemize}
+\tightlist
+\item
+  Utilisez la notation {[}début:fin{]} après le nom de la séquence pour
+  spécifier la plage d'indices que vous souhaitez extraire.
+\item
+  Le slicing inclut l'élément au niveau de l'index de début, mais exclut
+  l'élément au niveau de l'index de fin. Cela signifie que
+  ma\_liste{[}1:4{]} extrait les éléments à l'indice 1, 2 et 3, mais pas
+  l'élément à l'indice 4.
+\item
+  Si vous omettez l'indice de début, le slicing commencera à partir du
+  premier élément. Si vous omettez l'indice de fin, le slicing ira
+  jusqu'au dernier élément inclus.
+\item
+  Vous pouvez également spécifier un pas en ajoutant un troisième
+  paramètre {[}début:fin:pas{]}. Par exemple, ma\_liste{[}0:5:2{]}
+  extraira les éléments aux indices 0, 2 et 4.
+\item
+  Le slicing fonctionne de la même manière pour les chaînes de
+  caractères et les tuples.
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} INDEXING}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{séquence complete:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{villes}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{index 0:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{villes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{index 1:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{villes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dernier index (\PYZhy{}1):}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{villes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+séquence complete: ['Paris', 'Berlin', 'Londres', 'Bruxelles']
+index 0: Paris
+index 1: Berlin
+dernier index (-1): Bruxelles
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} SLICING [début (inclus) : fin (exclus) : pas]}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{séquence complete:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{villes}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{index 0\PYZhy{}2:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{villes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{index 1\PYZhy{}2:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{villes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ordre inverse:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{villes}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+séquence complete: ['Paris', 'Berlin', 'Londres', 'Bruxelles']
+index 0-2: ['Paris', 'Berlin', 'Londres']
+index 1-2: ['Berlin', 'Londres']
+ordre inverse: ['Bruxelles', 'Londres', 'Berlin', 'Paris']
+    \end{Verbatim}
+
+    \hypertarget{actions-utiles-sur-les-listes}{%
+\subsubsection{Actions utiles sur les
+listes}\label{actions-utiles-sur-les-listes}}
+
+\begin{itemize}
+\item
+  append(element): append is a list method that adds a specified element
+  to the end of the list. It is commonly used when you want to add a
+  single element to the existing list.
+\item
+  insert(index, element): insert is a list method that allows you to
+  insert an element at a specific index (position) within the list. You
+  provide both the index where you want to insert the element and the
+  element itself.
+\item
+  extend(iterable): extend is a list method used to add multiple
+  elements to the end of an existing list. It takes an iterable (such as
+  a list, tuple, or string) as an argument and appends all its elements
+  to the end of the list.
+\item
+  sort(reverse=False): sort is a list method that arranges the elements
+  of the list in a specific order. By default, it sorts the list in
+  ascending order (from lowest to highest). You can also use
+  reverse=True to sort in descending order.
+\item
+  count(element): count is a list method that counts the number of
+  occurrences of a specific element in the list. It is useful when you
+  want to determine how many times a particular value appears in the
+  list.
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{villes} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Paris}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Berlin}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Londres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bruxelles}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{c+c1}{\PYZsh{} liste initiale}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{villes}\PY{p}{)}
+
+\PY{n}{villes}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Dublin}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} Rajoute un élément a la fin de la liste}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{villes}\PY{p}{)}
+
+\PY{n}{villes}\PY{o}{.}\PY{n}{insert}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Madrid}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} Rajoute un élément a l\PYZsq{}index indiqué}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{villes}\PY{p}{)}
+
+\PY{n}{villes}\PY{o}{.}\PY{n}{extend}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Amsterdam}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Rome}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)} \PY{c+c1}{\PYZsh{} Rajoute une liste a la fin de notre liste}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{villes}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{longeur de la liste:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{villes}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{}affiche la longueur de la liste}
+
+\PY{n}{villes}\PY{o}{.}\PY{n}{sort}\PY{p}{(}\PY{n}{reverse}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)} \PY{c+c1}{\PYZsh{} trie la liste par ordre alphabétique / numérique}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{villes}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{villes}\PY{o}{.}\PY{n}{count}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Paris}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} compte le nombre de fois qu\PYZsq{}un élément apparait dans la liste}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+['Paris', 'Berlin', 'Londres', 'Bruxelles']
+['Paris', 'Berlin', 'Londres', 'Bruxelles', 'Dublin']
+['Paris', 'Berlin', 'Madrid', 'Londres', 'Bruxelles', 'Dublin']
+['Paris', 'Berlin', 'Madrid', 'Londres', 'Bruxelles', 'Dublin', 'Amsterdam',
+'Rome']
+longeur de la liste: 8
+['Amsterdam', 'Berlin', 'Bruxelles', 'Dublin', 'Londres', 'Madrid', 'Paris',
+'Rome']
+1
+    \end{Verbatim}
+
+    Les listes et les tuples fonctionnent en harmonies avec les structures
+de controle \textbf{if/else} et \textbf{For}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Paris}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{villes}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{oui}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{k}{else}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{non}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+oui
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{for} \PY{n}{element} \PY{o+ow}{in} \PY{n}{villes}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{n}{element}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Amsterdam
+Berlin
+Bruxelles
+Dublin
+Londres
+Madrid
+Paris
+Rome
+    \end{Verbatim}
+
+    \hypertarget{enumerate-en-python}{%
+\subsubsection{enumerate en Python :}\label{enumerate-en-python}}
+
+La fonction enumerate en Python est une fonction intégrée qui est
+utilisée pour énumérer les éléments d'une séquence, comme une liste ou
+une chaîne de caractères, tout en fournissant leur indice (position)
+dans la séquence. Elle est couramment utilisée dans les boucles pour
+accéder à la fois à l'élément et à son indice. Voici une explication en
+français :
+
+\begin{verbatim}
+enumerate est une fonction qui prend en entrée une séquence (comme une liste ou une chaîne de caractères) et renvoie un objet itérable qui produit des paires (indice, élément).
+L'indice commence généralement à 0 pour le premier élément de la séquence, puis s'incrémente à chaque itération.
+La fonction enumerate est utile lorsque vous avez besoin à la fois de la valeur de l'élément et de son indice dans une boucle.
+Elle permet d'améliorer la lisibilité du code en évitant d'utiliser une variable de compteur pour suivre l'indice.
+\end{verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{for} \PY{n}{index}\PY{p}{,} \PY{n}{element} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{villes}\PY{p}{)}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{n}{index}\PY{p}{,} \PY{n}{element}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+0 Amsterdam
+1 Berlin
+2 Bruxelles
+3 Dublin
+4 Londres
+5 Madrid
+6 Paris
+7 Rome
+    \end{Verbatim}
+
+    \hypertarget{zip-en-python}{%
+\subsubsection{zip en Python :}\label{zip-en-python}}
+
+La fonction zip en Python est une fonction intégrée qui combine
+plusieurs séquences (telles que des listes ou des tuples) en une seule
+séquence, en associant les éléments correspondants par position. Voici
+une explication en français :
+
+\begin{verbatim}
+zip prend en entrée une ou plusieurs séquences de même longueur et renvoie un objet itérable qui produit des tuples contenant les éléments correspondants de chaque séquence.
+Les séquences doivent avoir la même longueur, sinon zip s'arrêtera lorsque la séquence la plus courte sera épuisée.
+La fonction zip est couramment utilisée pour regrouper des données connexes à partir de différentes séquences, par exemple, lors de la création d'une liste de paires de valeurs à partir de deux listes distinctes.
+Elle permet de simplifier le code en évitant l'utilisation de boucles pour parcourir simultanément plusieurs séquences.
+\end{verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{liste\PYZus{}2} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{312}\PY{p}{,} \PY{l+m+mi}{52}\PY{p}{,} \PY{l+m+mi}{654}\PY{p}{,} \PY{l+m+mi}{23}\PY{p}{,} \PY{l+m+mi}{65}\PY{p}{,} \PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{678}\PY{p}{]}
+\PY{n}{liste\PYZus{}3} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{]}
+\PY{k}{for} \PY{n}{element\PYZus{}1}\PY{p}{,} \PY{n}{element\PYZus{}2}\PY{p}{,}\PY{n}{element\PYZus{}3} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{villes}\PY{p}{,} \PY{n}{liste\PYZus{}2}\PY{p}{,}\PY{n}{liste\PYZus{}3}\PY{p}{)}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{n}{element\PYZus{}3}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ \PYZhy{} }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{element\PYZus{}1}\PY{p}{,} \PY{n}{element\PYZus{}2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+1  -  Amsterdam 312
+2  -  Berlin 52
+3  -  Bruxelles 654
+4  -  Dublin 23
+5  -  Londres 65
+6  -  Madrid 12
+7  -  Paris 678
+    \end{Verbatim}
+
+    \hypertarget{dictionnaires}{%
+\subsection{Dictionnaires}\label{dictionnaires}}
+
+Les dictionnaires sont des structures de controle
+\textbf{non-ordonnées}, c'est-a-dire que les valeurs qu'ils contiennent
+ne sont pas rangée selon un index, mais suivant une \textbf{clef
+unique}.
+
+Une utilisation parfaite des dictionnaires est pour regrouper ensemble
+des ``variables'' dans un meme conténaire. (ces variables ne sont pas de
+vraies variables, mais des \textbf{keys}).
+
+\emph{On peut par exemple crée un dictionnaire inventaire qui regroupe
+plusieurs produits (les clefs) et leur quantités (les valeurs)}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Dict.values() :
+
+  Dict.values() est une méthode de dictionnaire qui renvoie une vue
+  d'ensemble (view) des valeurs du dictionnaire. Cette vue d'ensemble
+  contient toutes les valeurs du dictionnaire, sans les clés associées.
+  Il est couramment utilisé pour accéder à toutes les valeurs d'un
+  dictionnaire sans avoir besoin de parcourir les clés.
+\item
+  Dict.keys() :
+
+  Dict.keys() est une méthode de dictionnaire qui renvoie une vue
+  d'ensemble des clés du dictionnaire. Cette vue d'ensemble contient
+  toutes les clés du dictionnaire, sans les valeurs associées. Elle est
+  utilisée pour accéder à toutes les clés du dictionnaire, ce qui est
+  utile lorsque vous avez besoin de parcourir les clés ou de vérifier si
+  une clé spécifique existe dans le dictionnaire.
+\item
+  Dict.fromkeys() :
+
+  Dict.fromkeys(iterable, valeur\_par\_défaut) est une méthode de classe
+  qui crée un nouveau dictionnaire avec des clés à partir des éléments
+  de l'itérable fourni. Chaque clé est associée à la même valeur par
+  défaut spécifiée. Si aucune valeur par défaut n'est fournie, les clés
+  sont associées à None. Elle est utilisée pour initialiser un
+  dictionnaire avec des clés à partir d'une séquence donnée, par exemple
+  une liste ou un tuple.
+\item
+  Obtenir des informations (inventaire{[}`clé'{]} = 30 ou
+  inventaire.get(`pommes')) :
+
+  Vous pouvez obtenir des informations à partir d'un dictionnaire en
+  utilisant la notation de crochets (dictionnaire{[}`clé'{]}) pour
+  accéder à la valeur associée à une clé spécifique. L'opération
+  dictionnaire.get(`clé') permet également d'obtenir la valeur associée
+  à une clé, mais elle est plus sûre car elle ne génère pas d'erreur si
+  la clé n'existe pas dans le dictionnaire. Elle renvoie plutôt None ou
+  une valeur par défaut spécifiée.
+\item
+  Dict.pop(``clé'') :
+
+  Dict.pop(``clé'') est une méthode qui supprime l'élément associé à la
+  clé spécifiée dans le dictionnaire et renvoie la valeur de cet
+  élément. Si la clé n'existe pas dans le dictionnaire, elle peut
+  renvoyer une erreur si une valeur par défaut n'est pas spécifiée.
+\item
+  Dict.keys(), Dict.values(), Dict.items() :
+
+  Dict.keys() renvoie une vue d'ensemble des clés du dictionnaire.
+  Dict.values() renvoie une vue d'ensemble des valeurs du dictionnaire.
+  Dict.items() renvoie une vue d'ensemble des paires clé-valeur du
+  dictionnaire. Ces méthodes sont couramment utilisées pour parcourir ou
+  examiner les clés, les valeurs ou les paires clé-valeur dans un
+  dictionnaire.
+\end{enumerate}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{inventaire} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pommes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{100}\PY{p}{,}
+              \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bananes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{80}\PY{p}{,}
+              \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{poires}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{120}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{inventaire}\PY{o}{.}\PY{n}{values}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+dict\_values([100, 80, 120])
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{inventaire}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+dict\_keys(['pommes', 'bananes', 'poires'])
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{len}\PY{p}{(}\PY{n}{inventaire}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+3
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Voici comment ajouter une association key/value dans notre dictionnaire
+(attention si la clef existe déja elle est remplacée)
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{inventaire}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{abricots}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{30}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{inventaire}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\{'pommes': 100, 'bananes': 80, 'poires': 120, 'abricots': 30\}
+    \end{Verbatim}
+
+    Attention : si vous cherchez une clef qui n'existe pas dans un
+dictionnaire, python vous retourne une erreur. Pour éviter cela, vous
+pouvez utiliser la méthode \textbf{get()}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{inventaire}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{peches}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} n\PYZsq{}existe pas}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{inventaire}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pommes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} pomme existe}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+100
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Animal\PYZus{}list} \PY{o}{=}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dog}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bird}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fish}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{Animal\PYZus{}number} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{n}{MyAnimals}\PY{o}{=}\PY{p}{\PYZob{}}
+    
+\PY{p}{\PYZcb{}}
+\PY{n}{MyAnimals}\PY{o}{.}\PY{n}{fromkeys}\PY{p}{(}\PY{n}{Animal\PYZus{}list}\PY{p}{,}\PY{n}{Animal\PYZus{}number}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\{'dog': 0, 'cat': 0, 'bird': 0, 'fish': 0\}
+\end{Verbatim}
+\end{tcolorbox}
+        
+    la méthode \textbf{pop()} permet de retirer une clef d'un dictionnaire
+tout en retournant la valeur associée a la clef.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{abricots} \PY{o}{=} \PY{n}{inventaire}\PY{o}{.}\PY{n}{pop}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{abricots}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{inventaire}\PY{p}{)} \PY{c+c1}{\PYZsh{} ne contient plus de clef abricots}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{abricots}\PY{p}{)} \PY{c+c1}{\PYZsh{} abricots contient la valeur du dictionnaire}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\{'pommes': 100, 'bananes': 80, 'poires': 120\}
+30
+    \end{Verbatim}
+
+    Pour utiliser une boucle for avec un dictionnaire, il est utile
+d'utiliser la méthode \textbf{items()} qui retourne a la fois les clefs
+et les valeurs
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{for} \PY{n}{key} \PY{o+ow}{in} \PY{n}{inventaire}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{this is the key: }\PY{l+s+si}{\PYZob{}}\PY{n}{key}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{k}{for} \PY{n}{value} \PY{o+ow}{in} \PY{n}{inventaire}\PY{o}{.}\PY{n}{values}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{this is the values: }\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{value}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{k}{for} \PY{n}{key}\PY{p}{,} \PY{n}{value} \PY{o+ow}{in} \PY{n}{inventaire}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+  \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{this is key\PYZhy{}value: }\PY{l+s+si}{\PYZob{}}\PY{n}{key}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{value}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}} \PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+this is the key: pommes
+this is the key: bananes
+this is the key: poires
+this is the key: abricots
+--------------
+this is the values:
+this is the values:
+this is the values:
+this is the values:
+--------------
+this is key-value: pommes,100
+this is key-value: bananes,80
+this is key-value: poires,120
+this is key-value: abricots,30
+    \end{Verbatim}
+
+    \hypertarget{les-ensembles-sets}{%
+\subsection{Les ensembles (Sets)}\label{les-ensembles-sets}}
+
+En Python, un ensemble (ou ``set'' en anglais) est une collection non
+ordonnée d'éléments uniques. Contrairement à d'autres structures de
+données comme les listes et les tuples, les ensembles ne permettent pas
+de stocker des éléments en doublon. Voici une explication détaillée sur
+les ensembles en Python :
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Collection Non Ordonnée : Les ensembles ne maintiennent pas l'ordre
+  d'insertion des éléments. Par conséquent, il n'y a pas d'indice
+  associé à chaque élément dans un ensemble. L'ordre des éléments dans
+  un ensemble peut varier lorsque vous parcourez l'ensemble.
+\item
+  Éléments Uniques : Les ensembles ne permettent pas de stocker
+  plusieurs fois le même élément. Si vous tentez d'ajouter un élément
+  déjà présent dans l'ensemble, il ne sera pas ajouté une seconde fois.
+\item
+  Définition d'un Ensemble : Pour créer un ensemble en Python, vous
+  pouvez utiliser des accolades \{\} ou la fonction set(). Par exemple :
+  \texttt{python\ \ \ \ \ mon\_set\ =\ \{1,\ 2,\ 3\}\ ou\ mon\_set\ =\ set({[}1,\ 2,\ 3{]}).}
+\item
+  Opérations sur les Ensembles : Les ensembles prennent en charge un
+  ensemble d'opérations courantes, notamment l'ajout d'éléments, la
+  suppression d'éléments, la vérification de l'appartenance d'un
+  élément, l'union de deux ensembles, l'intersection, la différence,
+  etc.
+\item
+  Utilisations Courantes : Les ensembles sont couramment utilisés pour
+  effectuer des opérations ensemblistes, telles que la recherche
+  d'éléments uniques dans une liste, la déduplication de données, la
+  vérification de l'appartenance d'un élément à un ensemble de données,
+  etc.
+\item
+  Immuabilité des Éléments : Les éléments stockés dans un ensemble
+  doivent être immuables, c'est-à-dire qu'ils ne peuvent pas être
+  modifiés une fois qu'ils sont ajoutés à l'ensemble. Les types de
+  données immuables courants comprennent les nombres, les chaînes de
+  caractères et les tuples.
+\item
+  Itérabilité : Vous pouvez parcourir les éléments d'un ensemble à
+  l'aide d'une boucle for, mais rappelez-vous que l'ordre des éléments
+  n'est pas garanti.
+\item
+  Méthodes utiles : Les ensembles disposent de nombreuses méthodes
+  utiles, telles que add() pour ajouter un élément, remove() pour
+  supprimer un élément, union() pour l'union de deux ensembles,
+  intersection() pour l'intersection, difference() pour la différence,
+  etc.
+\end{enumerate}
+
+    \hypertarget{exercice}{%
+\subsection{Exercice}\label{exercice}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Transformer le code suivant qui donne la \textbf{suite de Fibonacci}
+  pour enregistrer les résultats dans une liste et retourner cette liste
+  a la fin de la fonction
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Exercice :}
+\KeywordTok{def}\NormalTok{ fibonacci(n):}
+\NormalTok{    a }\OperatorTok{=} \DecValTok{0}
+\NormalTok{    b }\OperatorTok{=} \DecValTok{1}
+    \ControlFlowTok{while}\NormalTok{ b }\OperatorTok{\textless{}}\NormalTok{ n:}
+\NormalTok{      a, b }\OperatorTok{=}\NormalTok{ b, a}\OperatorTok{+}\NormalTok{b}
+      \BuiltInTok{print}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Implémentez une fonction \emph{trier(classeur, valeur)} qui place une
+  valeur dans un dictionnaire en fonction de son signe
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{classeur }\OperatorTok{=}\NormalTok{ \{}\StringTok{\textquotesingle{}négatifs\textquotesingle{}}\NormalTok{:[],}
+            \StringTok{\textquotesingle{}positifs\textquotesingle{}}\NormalTok{:[]}
+\NormalTok{            \}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Implémentez un code qui permet de lire les valeur du classeur
+  parameters
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{parameters }\OperatorTok{=}\NormalTok{ \{}\StringTok{\textquotesingle{}Ws\textquotesingle{}}\NormalTok{:[}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{8}\NormalTok{],}
+            \StringTok{\textquotesingle{}Bs\textquotesingle{}}\NormalTok{:[}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{]}
+\NormalTok{            \}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\item
+  Écrivez un programme Python qui permet à l'utilisateur de saisir une
+  liste de nombres, puis ajoute un nombre supplémentaire à la fin de la
+  liste. Ensuite, le programme doit compter combien de fois ce nombre
+  supplémentaire apparaît dans la liste et afficher le résultat.
+\item
+  Créez un tuple contenant une série de nombres. Écrivez un programme
+  Python qui génère un nouveau tuple contenant la somme cumulative des
+  nombres du tuple d'origine. Par exemple, si le tuple initial est (1,
+  2, 3, 4), le nouveau tuple devrait être (1, 3, 6, 10).
+\item
+  Créez un dictionnaire de contacts en utilisant les noms comme clés et
+  les numéros de téléphone comme valeurs. Écrivez un programme Python
+  qui permet à l'utilisateur d'ajouter de nouveaux contacts, de
+  rechercher un numéro de téléphone par nom, de supprimer un contact
+  existant et d'afficher la liste complète des contacts.
+\item
+  Écrivez un programme Python qui prend une liste de nombres et supprime
+  tous les éléments de la liste qui sont plus petits qu'une valeur seuil
+  spécifiée par l'utilisateur. Affichez la liste résultante après la
+  suppression.
+\item
+  Créez deux tuples contenant des noms d'étudiants. Écrivez un programme
+  Python qui fusionne ces deux tuples en un seul, puis trie le tuple
+  résultant par ordre alphabétique des noms. Affichez le tuple trié.
+\end{enumerate}
+
+    
+
+    \hypertarget{tp-3-list-comprehension-et-fonctions-intuxe9gruxe9es}{%
+\section{TP 3: List Comprehension et fonctions
+intégrées}\label{tp-3-list-comprehension-et-fonctions-intuxe9gruxe9es}}
+
+\hypertarget{list-comprehension}{%
+\subsection{List Comprehension}\label{list-comprehension}}
+
+La compréhension de liste, souvent appelée ``list comprehension'' en
+anglais, est une manière concise et puissante de créer des listes en
+Python. Elle permet de générer rapidement une nouvelle liste en
+appliquant une expression à chaque élément d'une séquence (comme une
+liste, un tuple, ou une chaîne de caractères) ou en utilisant des
+conditions pour filtrer les éléments de la séquence d'origine. Voici une
+explication détaillée de la compréhension de liste :
+
+Syntaxe de base de la compréhension de liste :
+
+La syntaxe générale de la compréhension de liste est la suivante :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nouvelle\_liste }\OperatorTok{=}\NormalTok{ [expression }\ControlFlowTok{for}\NormalTok{ élément }\KeywordTok{in}\NormalTok{ séquence }\ControlFlowTok{if}\NormalTok{ condition]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+nouvelle_liste : C'est la nouvelle liste que vous allez créer.
+expression : C'est une expression Python qui sera évaluée pour chaque élément de la séquence.
+élément : C'est une variable temporaire qui prend la valeur de chaque élément de la séquence à chaque itération.
+séquence : C'est la séquence d'origine (liste, tuple, chaîne de caractères, etc.) que vous parcourez.
+condition (optionnelle) : C'est une condition qui filtre les éléments de la séquence. Seuls les éléments pour lesquels cette condition est vraie seront inclus dans la nouvelle liste.
+\end{verbatim}
+
+Exemple d'utilisation :
+
+Voici un exemple simple de compréhension de liste pour créer une liste
+des carrés des nombres de 0 à 9 :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{carres }\OperatorTok{=}\NormalTok{ [x}\OperatorTok{**}\DecValTok{2} \ControlFlowTok{for}\NormalTok{ x }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{10}\NormalTok{)]}
+\end{Highlighting}
+\end{Shaded}
+
+Dans cet exemple, x prend la valeur de chaque nombre de 0 à 9,
+l'expression x**2 calcule le carré de chaque nombre, et la nouvelle
+liste carres contient les carrés des nombres.
+
+Utilisation de la condition :
+
+Vous pouvez également utiliser une condition pour filtrer les éléments
+de la séquence d'origine. Par exemple, pour créer une liste des nombres
+pairs entre 0 et 9 :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nombres\_pairs }\OperatorTok{=}\NormalTok{ [x }\ControlFlowTok{for}\NormalTok{ x }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{10}\NormalTok{) }\ControlFlowTok{if}\NormalTok{ x }\OperatorTok{\%} \DecValTok{2} \OperatorTok{==} \DecValTok{0}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+Dans cet exemple, seuls les nombres pairs (ceux pour lesquels x \% 2 ==
+0 est vrai) sont inclus dans la nouvelle liste nombres\_pairs.
+
+Avantages de la compréhension de liste :
+
+\begin{verbatim}
+Concision : La compréhension de liste permet d'exprimer des opérations de création de liste de manière concise et lisible.
+
+Performance : Elle est généralement plus rapide que l'utilisation de boucles for traditionnelles pour la création de listes.
+
+Clarté : Elle améliore la lisibilité du code en évitant d'avoir à déclarer une liste vide et à ajouter des éléments un par un.
+\end{verbatim}
+
+Les deux code ci-dessous effectuent chacun la meme opération. On peut
+voir (grace a la commande \%\%time) que le temps d'execution avec liste
+comprehenion est bien inférieur au temps d'execution avec la méthode
+append()
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZpc{}\PYZpc{}time}
+\PY{n}{liste} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1000000}\PY{p}{)}\PY{p}{:}
+  \PY{n}{liste}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{i}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+CPU times: user 406 ms, sys: 22.3 ms, total: 428 ms
+Wall time: 526 ms
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZpc{}\PYZpc{}time}
+\PY{n}{liste} \PY{o}{=} \PY{p}{[}\PY{n}{i}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1000000}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+CPU times: user 334 ms, sys: 27.7 ms, total: 361 ms
+Wall time: 427 ms
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{liste} \PY{o}{=} \PY{p}{[}\PY{p}{[}\PY{n}{i}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{]}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{liste}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[[0, 4, 16, 36, 64], [0, 4, 16, 36, 64], [0, 4, 16, 36, 64]]
+    \end{Verbatim}
+
+    On peut rajouter des conditions \textbf{if} dans les listes
+comprehension, par exemple :
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{liste} \PY{o}{=} \PY{p}{[}\PY{n}{i}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{100000}\PY{p}{)} \PY{k}{if} \PY{p}{(}\PY{n}{i} \PY{o}{\PYZpc{}} \PY{l+m+mi}{2}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{]} \PY{c+c1}{\PYZsh{} calcule i**2 seulement pour les nombres pairs.}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{liste}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}\PY{p}{)} \PY{c+c1}{\PYZsh{}affiche les 10 premiers éléments de la liste}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[0, 4, 16, 36, 64, 100, 144, 196, 256, 324]
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{names}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{adel}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{omar}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{moktar}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ali}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{dico1}\PY{o}{=}\PY{p}{\PYZob{}}\PY{n}{name}\PY{p}{:}\PY{n}{idx} \PY{k}{for} \PY{n}{idx}\PY{p}{,}\PY{n}{name} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{names}\PY{p}{)}\PY{p}{\PYZcb{}}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{(}\PY{n}{dico1}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{dico1}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{dico1}\PY{o}{.}\PY{n}{values}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\{'adel': 0, 'omar': 1, 'moktar': 2, 'ali': 3\}
+dict\_keys(['adel', 'omar', 'moktar', 'ali'])
+dict\_values([0, 1, 2, 3])
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ages}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{30}\PY{p}{,}\PY{l+m+mi}{23}\PY{p}{,}\PY{l+m+mi}{25}\PY{p}{,}\PY{l+m+mi}{26}\PY{p}{]}
+\PY{n}{dico2}\PY{o}{=}\PY{p}{\PYZob{}}\PY{n}{names}\PY{p}{:}\PY{n}{ages} \PY{k}{for} \PY{n}{names}\PY{p}{,}\PY{n}{ages} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{names}\PY{p}{,}\PY{n}{ages}\PY{p}{)}\PY{p}{\PYZcb{}}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{(}\PY{n}{dico2}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{dico2}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{dico2}\PY{o}{.}\PY{n}{values}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\{'adel': 30, 'omar': 23, 'moktar': 25, 'ali': 26\}
+dict\_keys(['adel', 'omar', 'moktar', 'ali'])
+dict\_values([30, 23, 25, 26])
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ages}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{30}\PY{p}{,}\PY{l+m+mi}{23}\PY{p}{,}\PY{l+m+mi}{25}\PY{p}{,}\PY{l+m+mi}{26}\PY{p}{]}
+\PY{n}{dico2}\PY{o}{=}\PY{p}{\PYZob{}}\PY{n}{names}\PY{p}{:}\PY{n}{ages} \PY{k}{for} \PY{n}{names}\PY{p}{,}\PY{n}{ages} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{names}\PY{p}{,}\PY{n}{ages}\PY{p}{)} \PY{k}{if} \PY{n}{ages}\PY{o}{\PYZlt{}} \PY{l+m+mi}{30}\PY{p}{\PYZcb{}}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{(}\PY{n}{dico2}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{dico2}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{dico2}\PY{o}{.}\PY{n}{values}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\{'omar': 23, 'moktar': 25, 'ali': 26\}
+dict\_keys(['omar', 'moktar', 'ali'])
+dict\_values([23, 25, 26])
+    \end{Verbatim}
+
+    \hypertarget{built-in-functions}{%
+\subsection{Built-in Functions}\label{built-in-functions}}
+
+Python contient un grand nombre de fonctions intégrées tres utiles a
+connaitre. Cela vous permet de construire des codes plus rapidement,
+sans avoir a développer vos propres fonctions pour les taches les plus
+basique. Dans ce notebook, je vous montre les plus importantes :
+
+    \hypertarget{fonction-de-bases}{%
+\subsubsection{Fonction de bases}\label{fonction-de-bases}}
+
+Utiles en toute circonstance !
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{pi}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} valeur absolue}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} arrondi}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+3.141592653589793
+3.14159265
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{liste} \PY{o}{=} \PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{4}\PY{p}{]}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{min}\PY{p}{(}\PY{n}{liste}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} minimum}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{max}\PY{p}{(}\PY{n}{liste}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} maximum}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{liste}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} longueur}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{sum}\PY{p}{(}\PY{n}{liste}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} somme des éléments}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+-4
+3
+5
+-2
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{liste} \PY{o}{=} \PY{p}{[}\PY{k+kc}{False}\PY{p}{,} \PY{k+kc}{False}\PY{p}{,} \PY{k+kc}{True}\PY{p}{]}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{any}\PY{p}{(}\PY{n}{liste}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} y\PYZhy{}a\PYZhy{}t\PYZsq{}il au moins un élément True ?}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{all}\PY{p}{(}\PY{n}{liste}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} est\PYZhy{}ce\PYZhy{}que tous les éléments sont True ?}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+True
+False
+    \end{Verbatim}
+
+    \hypertarget{fonction-de-conversion}{%
+\subsubsection{Fonction de conversion}\label{fonction-de-conversion}}
+
+Il peut etre tres utile de convertir une variable d'un type a un autre
+(par exemple pour faire des calculs). Pour cela, on dispose des
+fonctions int(), str() et float().
+
+La fonction \textbf{type()} est tres utile pour inspecter les types de
+nos variables
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{age} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{32}\PY{l+s+s1}{\PYZsq{}}
+\PY{n+nb}{type}\PY{p}{(}\PY{n}{age}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+str
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{age} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{age}\PY{p}{)}
+\PY{n+nb}{type}\PY{p}{(}\PY{n}{age}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+int
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{age} \PY{o}{+} \PY{l+m+mi}{10}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+42
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{float}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+\PY{n+nb}{type}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+float
+\end{Verbatim}
+\end{tcolorbox}
+        
+    On peut également convertir des listes en tuples, ou des tableaux Numpy
+(que l'on verra par la suite) en liste\ldots{}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{tuple\PYZus{}1} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}
+
+\PY{n}{liste\PYZus{}1} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{tuple\PYZus{}1}\PY{p}{)} \PY{c+c1}{\PYZsh{} convertir un tuple en liste}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{liste\PYZus{}1}\PY{p}{)}
+\PY{n+nb}{type}\PY{p}{(}\PY{n}{liste\PYZus{}1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[1, 2, 3, 4]
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+list
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{bin}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{)}\PY{p}{,}\PY{n+nb}{bin}\PY{p}{(}\PY{l+m+mi}{32}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{oct}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{)}\PY{p}{,}\PY{n+nb}{oct}\PY{p}{(}\PY{l+m+mi}{32}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{hex}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{)}\PY{p}{,}\PY{n+nb}{hex}\PY{p}{(}\PY{l+m+mi}{32}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+0b1111 0b100000
+0o17 0o40
+0xf 0x20
+    \end{Verbatim}
+
+    \hypertarget{la-fonction-input}{%
+\subsubsection{\texorpdfstring{La fonction
+\textbf{input()}}{La fonction input()}}\label{la-fonction-input}}
+
+La fonction input() en Python est une fonction intégrée qui permet à un
+programme d'obtenir des données en entrée depuis l'utilisateur via le
+clavier. Elle est principalement utilisée pour interagir avec
+l'utilisateur en demandant des informations ou des réponses à des
+questions. Voici une brève explication de la fonction input() :
+
+\begin{itemize}
+\tightlist
+\item
+  Lorsque la fonction input() est appelée, elle affiche un message
+  d'invite (généralement une chaîne de caractères) à l'utilisateur, qui
+  apparaît dans la console.
+\item
+  L'utilisateur peut alors saisir des données depuis le clavier, suivi
+  de la touche ``Entrée''.
+\item
+  La fonction input() attend que l'utilisateur entre des données et
+  retourne une chaîne de caractères (string) contenant les données
+  saisies. L'application de la fonction input() est très utile pour
+  créer des programmes interactifs, des questionnaires, des formulaires
+  de saisie, etc.
+\item
+  Il est important de noter que la fonction input() renvoie toujours une
+  chaîne de caractères (string). Si vous avez besoin de manipuler des
+  données numériques, vous devrez les convertir en types de données
+  appropriés, tels que des entiers ou des nombres à virgule flottante, à
+  l'aide des fonctions de conversion telles que int() ou float().
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{age} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{quel age avez\PYZhy{}vous ?}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+quel age avez-vous ?30 ans
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{type}\PY{p}{(}\PY{n}{age}\PY{p}{)} \PY{c+c1}{\PYZsh{} age est de type string. il faut penser a le convertir si on désire faire un calcul avec}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+str
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{la-fonction-format}{%
+\subsubsection{\texorpdfstring{La fonction
+\textbf{format()}}{La fonction format()}}\label{la-fonction-format}}
+
+En Python, la méthode format() est utilisée pour formater des chaînes de
+caractères en y insérant des valeurs ou des variables dans des
+emplacements spécifiés, appelés ``emplacements de remplacement'' ou
+``placeholders''. Elle permet de créer des chaînes de caractères
+dynamiques en insérant des valeurs dans des positions prédéfinies. Voici
+une explication en français :
+
+\begin{itemize}
+\tightlist
+\item
+  La méthode format() est appelée sur une chaîne de caractères (la
+  chaîne de format) et accepte un ou plusieurs arguments qui seront
+  insérés dans la chaîne aux emplacements spécifiés.
+\item
+  Les emplacements de remplacement sont indiqués par des accolades \{\}
+  dans la chaîne de format. Par exemple, ``Bonjour, \{\} !'' est une
+  chaîne de format avec un emplacement de remplacement.
+\item
+  Vous pouvez spécifier l'ordre dans lequel les valeurs seront insérées
+  en utilisant des indices numériques à l'intérieur des accolades. Par
+  exemple, ``\{\} \{\} \{\}'' utilisera les trois premiers arguments
+  dans cet ordre.
+\item
+  Vous pouvez également nommer les emplacements de remplacement pour une
+  utilisation plus explicite. Par exemple, ``Bonjour, \{prenom\} !''
+  utilise un emplacement nommé \{prenom\}.
+\item
+  Les valeurs à insérer sont passées comme arguments à la méthode
+  format(), soit dans l'ordre, soit en utilisant des noms de paramètres
+  si des emplacements nommés sont utilisés.
+\item
+  La méthode format() effectue automatiquement la conversion de types,
+  ce qui signifie que vous pouvez insérer des valeurs de différents
+  types (entiers, nombres à virgule flottante, chaînes de caractères,
+  etc.) dans la chaîne de format.
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{x} \PY{o}{=} \PY{l+m+mi}{25}
+\PY{n}{ville} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Paris}\PY{l+s+s1}{\PYZsq{}}
+
+\PY{n}{message} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{il fait }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ degrés a }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{ville}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{message}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+il faut 25 degrés a Paris
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{message} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{il fait }\PY{l+s+si}{\PYZob{}}\PY{n}{x}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{ degrées a }\PY{l+s+si}{\PYZob{}}\PY{n}{ville}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{message}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+il fait 25 degrées a Paris
+    \end{Verbatim}
+
+    oici quelques astuces et techniques que vous pouvez utiliser avec la
+méthode format() en Python pour formater vos chaînes de caractères de
+manière plus efficace et lisible :
+
+\begin{itemize}
+\tightlist
+\item
+  Alignement du texte : Vous pouvez spécifier l'alignement du texte à
+  l'intérieur de l'emplacement de remplacement en utilisant les
+  caractères \textless, \textgreater, ou \^{}. Par exemple :
+  ``\{:\textgreater10\}''.format(``texte'') alignera le texte à droite
+  sur une largeur de 10 caractères.
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fruits}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{banana}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{grapes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{strawberries}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pear}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{peach}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{k}{for} \PY{n}{fruit} \PY{o+ow}{in} \PY{n}{fruits}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+si}{\PYZob{}:\PYZgt{}15\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{fruit}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+-         banana
+-         grapes
+-   strawberries
+-           pear
+-          peach
+    \end{Verbatim}
+
+    \begin{itemize}
+\tightlist
+\item
+  Remplacement conditionnel : Vous pouvez conditionnellement choisir
+  quelle valeur insérer en fonction d'une condition. Par exemple :
+  ``Bonjour, \{\} !''.format(nom if condition else ``Cher
+  utilisateur'').
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{a}\PY{o}{=}\PY{l+m+mi}{3}
+\PY{n}{condition}\PY{o}{=}\PY{k+kc}{True}
+\PY{n}{nom}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Omar}\PY{l+s+s1}{\PYZsq{}}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Bonjour, }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{ !}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{nom} \PY{k}{if} \PY{n}{condition} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Cher utilisateur}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{condition}\PY{o}{=}\PY{k+kc}{False}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Bonjour, }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{ !}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{nom} \PY{k}{if} \PY{n}{condition} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Cher utilisateur}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Bonjour, Omar !
+Bonjour, Cher utilisateur !
+    \end{Verbatim}
+
+    Répétition d'un motif : Vous pouvez répéter un motif dans un emplacement
+de remplacement. Par exemple : ``-'' * 20 crée une chaîne composée de 20
+tirets.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{*}\PY{l+m+mi}{20}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{*}\PY{l+s+s2}{\PYZdq{}}\PY{o}{*}\PY{l+m+mi}{20}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+('--------------------', '********************')
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{la-fonction-open}{%
+\subsubsection{\texorpdfstring{La fonction
+\textbf{open()}}{La fonction open()}}\label{la-fonction-open}}
+
+Cette fonction est l'une des plus utile de Python. Elle permet d'ouvrir
+n'importe quel fichier de votre ordinateur et de l'utiliser dans Python.
+Différents modes existent : - le mode `r' : lire un fichier de votre
+ordinateur - le mode `w' : écrire un fichier sur votre ordinateur - le
+mode `a' : (append) ajouter du contenu dans un fichier existant
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{f} \PY{o}{=} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./assets/text.txt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} ouverture d\PYZsq{}un objet fichier f}
+\PY{n}{f}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hello}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{f}\PY{o}{.}\PY{n}{close}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{} il faut fermer notre fichier une fois le travail terminé}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{f} \PY{o}{=} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./assets/text.txt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n}{f}\PY{o}{.}\PY{n}{close}\PY{p}{(}\PY{p}{)} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+hello
+    \end{Verbatim}
+
+    Dans la pratique, on écrit plus souvent \textbf{with open() as f} pour
+ne pas avoir a fermer le fichier une fois le travail effectué :
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./assets/text.txt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+hello
+    \end{Verbatim}
+
+    \hypertarget{exercice}{%
+\subsection{Exercice}\label{exercice}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Le code ci-dessous permet de créer un fichier qui contient les nombres
+  carrée de 0 jusqu'a 19. L'exercice est d'implémenter un code qui
+  permet de lire ce fichier et d'écrire chaque ligne dans une liste.
+\end{enumerate}
+
+Note\_1 : la fonction \textbf{read().splitlines()} sera tres utile
+
+Note\_2 : Pour un meilleur résultat, essayer d'utiliser une liste
+comprehension !
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Ce bout de code permet d\PYZsq{}écrire le fichier }
+\PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./assets/fichier.txt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{20}\PY{p}{)}\PY{p}{:}
+        \PY{n}{f}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{ }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{f}\PY{o}{.}\PY{n}{close}\PY{p}{(}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Écrivez ici le code pour lire le fichier et enregistrer chaque lignes dans une liste.}
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
