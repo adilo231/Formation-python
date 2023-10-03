@@ -1,0 +1,141 @@
+\contentsline {section}{\numberline {1}TP 1: Variables, Fonctions et Structure de control}{6}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Variables et Operations}{6}{subsection.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.1}Opérations Arithmétiques en Python}{6}{subsubsection.1.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.2}Opérations de Comparaison en Python}{7}{subsubsection.1.1.2}%
+\contentsline {subsubsection}{\numberline {1.1.3}Opérations Logiques en Python}{8}{subsubsection.1.1.3}%
+\contentsline {subsection}{\numberline {1.2}Fonctions}{9}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}Les Fonctions Lambda en Python}{9}{subsubsection.1.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2}Fonction en Python}{10}{subsubsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.3}Structures de Contrôle en Programmation}{12}{subsection.1.3}%
+\contentsline {subsubsection}{\numberline {1.3.1}Les Blocks d'instructions}{12}{subsubsection.1.3.1}%
+\contentsline {subsubsection}{\numberline {1.3.2}Les instructions conditionnelles :}{13}{subsubsection.1.3.2}%
+\contentsline {subsubsection}{\numberline {1.3.3}2. Les instructions itératives For, while}{15}{subsubsection.1.3.3}%
+\contentsline {subsubsection}{\numberline {1.3.4}2. Boucle While}{16}{subsubsection.1.3.4}%
+\contentsline {subsection}{\numberline {1.4}Exercices}{16}{subsection.1.4}%
+\contentsline {subsubsection}{\numberline {1.4.1}Exercices Partie 1}{16}{subsubsection.1.4.1}%
+\contentsline {subsubsection}{\numberline {1.4.2}Exercices Partie 2}{17}{subsubsection.1.4.2}%
+\contentsline {section}{\numberline {2}TP 2: Structure de données}{18}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Listes et Tuples}{18}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Création de Listes et de Tuples}{18}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Indexing et Slicing}{19}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Actions utiles sur les listes}{20}{subsubsection.2.1.3}%
+\contentsline {subsubsection}{\numberline {2.1.4}enumerate en Python :}{21}{subsubsection.2.1.4}%
+\contentsline {subsubsection}{\numberline {2.1.5}zip en Python :}{22}{subsubsection.2.1.5}%
+\contentsline {subsection}{\numberline {2.2}Dictionnaires}{22}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Les ensembles (Sets)}{25}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Exercice}{26}{subsection.2.4}%
+\contentsline {section}{\numberline {3}TP 3: List Comprehension et fonctions intégrées}{26}{section.3}%
+\contentsline {subsection}{\numberline {3.1}List Comprehension}{26}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Built-in Functions}{29}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Fonction de bases}{29}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Fonction de conversion}{29}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}La fonction \textbf {input()}}{30}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}La fonction \textbf {format()}}{31}{subsubsection.3.2.4}%
+\contentsline {subsubsection}{\numberline {3.2.5}La fonction \textbf {open()}}{32}{subsubsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.3}Exercice}{33}{subsection.3.3}%
+\contentsline {section}{\numberline {4}TP 4: Modules de Bases}{33}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Modules math et statistics}{34}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Module Random}{34}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Modules OS et Glob}{35}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Le module os :}{35}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Le module glob :}{35}{subsubsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.4}Créer notre propre module}{36}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Exercices}{36}{subsection.4.5}%
+\contentsline {section}{\numberline {5}TP 5: Programmation Orientée Objet}{37}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Avantages de la POO en Python}{38}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Objets et Classes}{38}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Attributs et Méthodes}{39}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Encapsulation}{40}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Définition d'une Classe}{40}{subsection.5.5}%
+\contentsline {subsubsection}{\numberline {5.5.1}Constructeurs et Destructeurs}{41}{subsubsection.5.5.1}%
+\contentsline {subsubsection}{\numberline {5.5.2}Variables de Classe vs Variables d'Instance}{41}{subsubsection.5.5.2}%
+\contentsline {subsection}{\numberline {5.6}Exercices}{41}{subsection.5.6}%
+\contentsline {section}{\numberline {6}TP 6: Numpy}{42}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Générateurs de tableaux \textbf {ndarray}}{42}{subsection.6.1}%
+\contentsline {subsubsection}{\numberline {6.1.1}Création de Tableaux NumPy avec des Valeurs Initiales}{42}{subsubsection.6.1.1}%
+\contentsline {subsubsection}{\numberline {6.1.2}Création de Séquences Numériques}{42}{subsubsection.6.1.2}%
+\contentsline {subsubsection}{\numberline {6.1.3}Génération de Nombres Aléatoires}{42}{subsubsection.6.1.3}%
+\contentsline {subsection}{\numberline {6.2}Attributs importants}{44}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Méthodes importantes}{44}{subsection.6.3}%
+\contentsline {subsubsection}{\numberline {6.3.1}\textbf {reshape() : Redimensionner un Tableau}}{44}{subsubsection.6.3.1}%
+\contentsline {subsubsection}{\numberline {6.3.2}\textbf {ravel() : Aplatir un Tableau}}{44}{subsubsection.6.3.2}%
+\contentsline {subsubsection}{\numberline {6.3.3}\textbf {squeeze() : Supprimer les Dimensions Unitaires}}{45}{subsubsection.6.3.3}%
+\contentsline {subsubsection}{\numberline {6.3.4}\textbf {concatenate() : Assembler des Tableaux}}{45}{subsubsection.6.3.4}%
+\contentsline {subsubsection}{\numberline {6.3.5}\texttt {concatenate()}}{46}{subsubsection.6.3.5}%
+\contentsline {subsubsection}{\numberline {6.3.6}\texttt {vstack()}}{46}{subsubsection.6.3.6}%
+\contentsline {subsubsection}{\numberline {6.3.7}\texttt {hstack()}}{47}{subsubsection.6.3.7}%
+\contentsline {subsection}{\numberline {6.4}Slicing et Indexing}{48}{subsection.6.4}%
+\contentsline {subsubsection}{\numberline {6.4.1}Indexing (Indexation)}{48}{subsubsection.6.4.1}%
+\contentsline {subsubsection}{\numberline {6.4.2}Slicing (Découpage)}{48}{subsubsection.6.4.2}%
+\contentsline {subsection}{\numberline {6.5}Boolean Indexing}{49}{subsection.6.5}%
+\contentsline {subsubsection}{\numberline {6.5.1}Création d'un Tableau Booléen}{49}{subsubsection.6.5.1}%
+\contentsline {subsubsection}{\numberline {6.5.2}Indexation à l'aide du Tableau Booléen}{50}{subsubsection.6.5.2}%
+\contentsline {subsection}{\numberline {6.6}Numpy : Mathématiques}{50}{subsection.6.6}%
+\contentsline {subsubsection}{\numberline {6.6.1}Méthodes de bases (les plus utiles) de la classe ndarray}{50}{subsubsection.6.6.1}%
+\contentsline {subsubsection}{\numberline {6.6.2}Numpy Statistics}{52}{subsubsection.6.6.2}%
+\contentsline {subsubsection}{\numberline {6.6.3}Algebre Linéaire}{53}{subsubsection.6.6.3}%
+\contentsline {subsubsection}{\numberline {6.6.4}Fonctions mathématiques}{54}{subsubsection.6.6.4}%
+\contentsline {subsection}{\numberline {6.7}Exercices}{54}{subsection.6.7}%
+\contentsline {section}{\numberline {7}TP 7: Scipy}{55}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Interpolation}{55}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Optimisation}{57}{subsection.7.2}%
+\contentsline {subsubsection}{\numberline {7.2.1}curve\_fit}{57}{subsubsection.7.2.1}%
+\contentsline {subsubsection}{\numberline {7.2.2}Minimisation 1D}{59}{subsubsection.7.2.2}%
+\contentsline {subsubsection}{\numberline {7.2.3}Minimisation 2D}{61}{subsubsection.7.2.3}%
+\contentsline {subsection}{\numberline {7.3}Traitement du signal}{63}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}Transformation de Fourier (FFT)}{65}{subsection.7.4}%
+\contentsline {subsection}{\numberline {7.5}Traitement d'image}{68}{subsection.7.5}%
+\contentsline {subsection}{\numberline {7.6}Application (cas réel)}{70}{subsection.7.6}%
+\contentsline {section}{\numberline {8}TP 8: Matplotlib}{74}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Cycle de Vie pour la Création de Figures avec Matplotlib}{74}{subsection.8.1}%
+\contentsline {subsubsection}{\numberline {8.1.1}\textbf {Création de la Figure avec \texttt {plt.figure()} et \texttt {figsize}}}{74}{subsubsection.8.1.1}%
+\contentsline {subsubsection}{\numberline {8.1.2}\textbf {Création du Graphique avec \texttt {plt.plot()}}}{75}{subsubsection.8.1.2}%
+\contentsline {subsubsection}{\numberline {8.1.3}Ajout d'Extras (Titres, Axes, Légendes)}{75}{subsubsection.8.1.3}%
+\contentsline {subsubsection}{\numberline {8.1.4}\textbf {Affichage de la Figure avec \texttt {plt.show()}}}{75}{subsubsection.8.1.4}%
+\contentsline {subsection}{\numberline {8.2}Pyplot}{75}{subsection.8.2}%
+\contentsline {subsubsection}{\numberline {8.2.1}Graphiques simples}{75}{subsubsection.8.2.1}%
+\contentsline {subsubsection}{\numberline {8.2.2}Styles Graphiques}{77}{subsubsection.8.2.2}%
+\contentsline {subsubsection}{\numberline {8.2.3}Subplots}{78}{subsubsection.8.2.3}%
+\contentsline {subsubsection}{\numberline {8.2.4}Méthode orientée objet}{79}{subsubsection.8.2.4}%
+\contentsline {paragraph}{Exercice 2}{80}{section*.2}%
+\contentsline {subsection}{\numberline {8.3}Matplotlib Graphiques importants}{80}{subsection.8.3}%
+\contentsline {subsubsection}{\numberline {8.3.1}Graphique de Classification (Scatter())}{80}{subsubsection.8.3.1}%
+\contentsline {subsubsection}{\numberline {8.3.2}Graphiques 3D}{83}{subsubsection.8.3.2}%
+\contentsline {subsubsection}{\numberline {8.3.3}Histogrammes}{85}{subsubsection.8.3.3}%
+\contentsline {subsubsection}{\numberline {8.3.4}Graphiques ContourPlot()}{88}{subsubsection.8.3.4}%
+\contentsline {subsubsection}{\numberline {8.3.5}Imshow()}{90}{subsubsection.8.3.5}%
+\contentsline {subsection}{\numberline {8.4}Exercice}{91}{subsection.8.4}%
+\contentsline {section}{\numberline {9}TP 9: Pandas et Seaborn}{91}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Pandas}{91}{subsection.9.1}%
+\contentsline {subsubsection}{\numberline {9.1.1}DataFrame Pandas}{92}{subsubsection.9.1.1}%
+\contentsline {subsubsection}{\numberline {9.1.2}Charger vos données dans un}{92}{subsubsection.9.1.2}%
+\contentsline {subsubsection}{\numberline {9.1.3}Méthodes de Manipulation de Données avec Pandas}{92}{subsubsection.9.1.3}%
+\contentsline {subsubsection}{\numberline {9.1.4}Nettoyer des Datasets}{94}{subsubsection.9.1.4}%
+\contentsline {subsubsection}{\numberline {9.1.5}Statistics avec Groupby() et value\_counts()}{95}{subsubsection.9.1.5}%
+\contentsline {subsubsection}{\numberline {9.1.6}Operation sur les serie}{97}{subsubsection.9.1.6}%
+\contentsline {subsubsection}{\numberline {9.1.7}Méthodes loc et iloc}{99}{subsubsection.9.1.7}%
+\contentsline {subsubsection}{\numberline {9.1.8}Codefication des donnees}{99}{subsubsection.9.1.8}%
+\contentsline {subsection}{\numberline {9.2}Seaborn}{102}{subsection.9.2}%
+\contentsline {subsubsection}{\numberline {9.2.1}La vue d'ensemble Pairplot()}{103}{subsubsection.9.2.1}%
+\contentsline {subsubsection}{\numberline {9.2.2}Visualiser de catégories}{104}{subsubsection.9.2.2}%
+\contentsline {subsubsection}{\numberline {9.2.3}Visualisation de Distributions}{108}{subsubsection.9.2.3}%
+\contentsline {section}{\numberline {10}TP 10: Expressions régulière}{110}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Syntaxe des expressions régulières}{111}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Utilisation des expressions régulières sous Python}{112}{subsection.10.2}%
+\contentsline {subsubsection}{\numberline {10.2.1}Recherche}{112}{subsubsection.10.2.1}%
+\contentsline {subsubsection}{\numberline {10.2.2}Recherche / remplacement}{113}{subsubsection.10.2.2}%
+\contentsline {subsubsection}{\numberline {10.2.3}Recherche / remplacement avec utilisation de fonction}{113}{subsubsection.10.2.3}%
+\contentsline {section}{\numberline {11}Exercices}{114}{section.11}%
+\contentsline {subsection}{\numberline {11.1}EXO 1 :}{114}{subsection.11.1}%
+\contentsline {subsection}{\numberline {11.2}EXO2 :}{114}{subsection.11.2}%
+\contentsline {subsection}{\numberline {11.3}EXO 3}{115}{subsection.11.3}%
+\contentsline {subsection}{\numberline {11.4}EXO 4}{115}{subsection.11.4}%
+\contentsline {subsection}{\numberline {11.5}EXO 5}{116}{subsection.11.5}%
+\contentsline {section}{\numberline {12}TP 11 : Cryptographie}{118}{section.12}%
+\contentsline {subsection}{\numberline {12.1}Fonction de Hachage}{118}{subsection.12.1}%
+\contentsline {subsection}{\numberline {12.2}Chiffrement avec AES}{118}{subsection.12.2}%
+\contentsline {subsubsection}{\numberline {12.2.1}Important:}{119}{subsubsection.12.2.1}%
+\contentsline {subsubsection}{\numberline {12.2.2}Travail demandé}{119}{subsubsection.12.2.2}%
+\contentsline {subsection}{\numberline {12.3}Chiffrement avec RSA}{120}{subsection.12.3}%
+\contentsline {subsubsection}{\numberline {12.3.1}Génération de cle RSA}{120}{subsubsection.12.3.1}%
+\contentsline {subsubsection}{\numberline {12.3.2}Chiffrement et déchiffrement avec RSA}{121}{subsubsection.12.3.2}%
